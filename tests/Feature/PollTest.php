@@ -21,4 +21,11 @@ class PollTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson($polls->toArray());
     }
+
+    public function testCreateNewPoll(){
+        $poll= factory("App\Poll")->raw();
+        $response = $this->post('/polls',$poll);
+        $response->assertStatus(201);
+        $response->assertJson($poll);
+    }
 }
