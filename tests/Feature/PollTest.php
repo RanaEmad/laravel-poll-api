@@ -28,4 +28,16 @@ class PollTest extends TestCase
         $response->assertStatus(201);
         $response->assertJson($poll);
     }
+
+    public function testGetOnePoll(){
+        $poll= factory("App\Poll")->create();
+        $response = $this->get("/polls/{$poll->id}");
+        $response->assertStatus(200);
+        $response->assertJson($poll->toArray());
+    }
+
+    public function testGetNonExistingPoll(){
+        $response = $this->get("/polls/1");
+        $response->assertStatus(404);
+    }
 }

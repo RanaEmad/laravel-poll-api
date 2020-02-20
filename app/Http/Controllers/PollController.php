@@ -36,7 +36,7 @@ class PollController extends Controller
      */
     public function show(Poll $poll)
     {
-        //
+        return response()->json($poll,200);
     }
 
     /**
