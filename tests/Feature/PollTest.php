@@ -40,4 +40,20 @@ class PollTest extends TestCase
         $response = $this->get("/polls/1");
         $response->assertStatus(404);
     }
+
+    public function testUpdatePoll(){
+        $poll= factory("App\Poll")->create();
+        $newTitle="test poll update";
+        $response= $this->put("/polls/{$poll->id}",["title"=>$newTitle]);
+        $poll->title=$newTitle;
+        $response->assertStatus(200);
+        $response->assertJson($poll->toArray());
+    }
+
+    public function testUpdateNonExistingPoll(){
+        $newTitle="test poll update";
+        $response= $this->put("/polls/1000",["title"=>$newTitle]);
+        $response->assertStatus(404);
+    }
+
 }

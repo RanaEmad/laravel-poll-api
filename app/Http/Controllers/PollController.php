@@ -59,7 +59,9 @@ class PollController extends Controller
      */
     public function update(Request $request, Poll $poll)
     {
-        //
+        $poll->title= $request->title;
+        $poll->save();
+        return response()->json($poll,200);
     }
 
     /**
