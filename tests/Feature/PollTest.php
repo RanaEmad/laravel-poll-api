@@ -56,4 +56,12 @@ class PollTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function testDeletePoll(){
+        $poll= factory("App\Poll")->create();
+        $response= $this->delete("/polls/{$poll->id}");
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing("polls",$poll->toArray());
+        $response->assertJson(["message"=>"Data Deleted Successfully!"]);
+    }
+
 }

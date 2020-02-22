@@ -72,6 +72,7 @@ class PollController extends Controller
      */
     public function destroy(Poll $poll)
     {
-        //
+        $poll->delete();
+        return response()->json(["message"=>"Data Deleted Successfully!"],200);
     }
 }
