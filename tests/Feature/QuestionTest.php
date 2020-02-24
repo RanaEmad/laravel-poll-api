@@ -40,4 +40,13 @@ class QuestionTest extends TestCase
         $response=$this->post("/polls/1400/questions",$question);
         $response->assertStatus(404);
     }
+
+    public function testUpdateQuestion(){
+         $this->withoutExceptionHandling();
+        $question= \factory("App\Question")->create();
+        $question->title= "updated title";
+        $response=$this->put("/questions/{$question->id}",$question->toArray());
+        $response->assertStatus(200);
+        $response->assertJson($question->toArray());
+    }
 }
