@@ -51,4 +51,13 @@ class AnswerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson($answer->toArray());
     }
+
+    public function testDeleteAnswer(){
+        $answer= factory("App\Answer")->create();
+
+        $response= $this->delete("/answers/{$answer->id}");
+        $response->assertStatus(200);
+        $response->assertJson(["message"=>"Data Deleted Successfully!"]);
+        $this->assertDatabaseMissing("answers",$answer->toArray());
+    }
 }
