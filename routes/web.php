@@ -18,3 +18,5 @@ Route::get('/', function () {
 Route::resource('polls', 'PollController');
 
 Route::resource('polls.questions', 'QuestionController')->shallow();
+
+Route::resource("questions.answers","AnswerController")->shallow();
