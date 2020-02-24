@@ -39,7 +39,7 @@ class AnswerController extends Controller
      */
     public function show(Answer $answer)
     {
-        //
+        return response()->json($answer->toArray(),200);
     }
 
     /**

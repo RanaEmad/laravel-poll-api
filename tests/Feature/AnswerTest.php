@@ -44,4 +44,11 @@ class AnswerTest extends TestCase
         $response->assertJson($answer->toArray());
         $this->assertDatabaseHas("answers",$answer->toArray());
     }
+
+    public function testGetOneAnswer(){
+        $answer= factory("App\Answer")->create();
+        $response= $this->get("/answers/{$answer->id}");
+        $response->assertStatus(200);
+        $response->assertJson($answer->toArray());
+    }
 }
