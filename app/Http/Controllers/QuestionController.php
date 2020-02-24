@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Poll;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -12,9 +13,9 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Poll $poll)
     {
-        //
+        return response()->json($poll->questions,200);
     }
 
     /**

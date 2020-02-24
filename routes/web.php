@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::resource('polls', 'PollController');
+
+Route::resource('polls.questions', 'QuestionController');
