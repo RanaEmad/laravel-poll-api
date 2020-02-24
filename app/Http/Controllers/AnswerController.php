@@ -43,17 +43,6 @@ class AnswerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Answer  $answer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Answer $answer)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -62,7 +51,9 @@ class AnswerController extends Controller
      */
     public function update(Request $request, Answer $answer)
     {
-        //
+        $answer->answer= $request->answer;
+        $answer->save();
+        return response()->json($answer->toArray(),200);
     }
 
     /**
