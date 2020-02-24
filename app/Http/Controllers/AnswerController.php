@@ -24,9 +24,11 @@ class AnswerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($question_id,Request $request)
     {
-        //
+        $attributes= $request->all();
+        $attributes["question_id"]=$question_id;
+        return response()->json(Answer::create($attributes),201);
     }
 
     /**

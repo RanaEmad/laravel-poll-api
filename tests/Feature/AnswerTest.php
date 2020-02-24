@@ -24,5 +24,15 @@ class AnswerTest extends TestCase
 
         $response->assertJson($answers->toArray());
     }
-    
+
+    public function testCreateNewAnswer(){
+        $this->withoutExceptionHandling();
+        $question = factory("App\Question")->create();
+        $answer= factory("App\Answer")->raw(["question_id"=>""]);
+        $response= $this->post("/questions/{$question->id}/answers",$answer);
+        $response->assertStatus(201);
+        $answer["question_id"]=$question->id;
+        $this->assertDatabaseHas("answers",$answer);
+        $response->assertJson($answer);
+    }
 }
