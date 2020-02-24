@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +17,10 @@ class PollTest extends TestCase
      */
     public function testGetAllPolls()
     {
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $polls= factory("App\Poll",5)->create();
         $response = $this->get('/polls');
         $response->assertStatus(200);
@@ -23,6 +28,10 @@ class PollTest extends TestCase
     }
 
     public function testCreateNewPoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $poll= factory("App\Poll")->raw();
         $response = $this->post('/polls',$poll);
         $response->assertStatus(201);
@@ -30,6 +39,10 @@ class PollTest extends TestCase
     }
 
     public function testGetOnePoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $poll= factory("App\Poll")->create();
         $response = $this->get("/polls/{$poll->id}");
         $response->assertStatus(200);
@@ -37,11 +50,19 @@ class PollTest extends TestCase
     }
 
     public function testGetNonExistingPoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $response = $this->get("/polls/1");
         $response->assertStatus(404);
     }
 
     public function testUpdatePoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $poll= factory("App\Poll")->create();
         $newTitle="test poll update";
         $response= $this->put("/polls/{$poll->id}",["title"=>$newTitle]);
@@ -51,12 +72,20 @@ class PollTest extends TestCase
     }
 
     public function testUpdateNonExistingPoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $newTitle="test poll update";
         $response= $this->put("/polls/1000",["title"=>$newTitle]);
         $response->assertStatus(404);
     }
 
     public function testDeletePoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $poll= factory("App\Poll")->create();
         $response= $this->delete("/polls/{$poll->id}");
         $response->assertStatus(200);

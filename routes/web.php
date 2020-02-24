@@ -15,8 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('polls', 'PollController');
+Route::middleware('auth:api')->resource('polls', 'PollController');
 
-Route::resource('polls.questions', 'QuestionController')->shallow();
+Route::middleware('auth:api')->resource('polls.questions', 'QuestionController')->shallow();
 
-Route::resource("questions.answers","AnswerController")->shallow();
+Route::middleware('auth:api')->resource("questions.answers","AnswerController")->shallow();
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

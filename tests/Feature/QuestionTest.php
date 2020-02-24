@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +17,10 @@ class QuestionTest extends TestCase
      */
     public function testGetPollQuestions()
     {
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $poll= \factory("App\Poll")->create();
         $questions= \factory("App\Question",5)->create(["poll_id"=>$poll->id]);
         $response = $this->get("/polls/{$poll->id}/questions");
@@ -25,6 +30,10 @@ class QuestionTest extends TestCase
     }
 
     public function testCreateNewQuestion(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         // $this->withoutExceptionHandling();
         $poll= \factory("App\Poll")->create();
         $question= \factory("App\Question")->raw(["poll_id"=>""]);
@@ -35,6 +44,10 @@ class QuestionTest extends TestCase
     }
 
     public function testCreateNewQuestionToNonExistingPoll(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         // $this->withoutExceptionHandling();
         $question= \factory("App\Question")->raw(["poll_id"=>""]);
         $response=$this->post("/polls/1400/questions",$question);
@@ -42,6 +55,10 @@ class QuestionTest extends TestCase
     }
 
     public function testUpdateQuestion(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
          $this->withoutExceptionHandling();
         $question= \factory("App\Question")->create();
         $question->title= "updated title";
@@ -51,6 +68,10 @@ class QuestionTest extends TestCase
     }
 
     public function testGetOneQuestion(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         // $this->withoutExceptionHandling();
         $question = \factory("App\Question")->create();
         $response = $this->get("/questions/{$question->id}");
@@ -59,6 +80,10 @@ class QuestionTest extends TestCase
     }
 
     public function testDeleteQuestion(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $question= \factory("App\Question")->create();
         $response= $this->delete("/questions/{$question->id}");
         $response->assertStatus(200);

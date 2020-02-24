@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Laravel\Passport\Passport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +17,10 @@ class AnswerTest extends TestCase
      */
     public function testGetQuestionAnswers()
     {
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $question= factory("App\Question")->create();
         $answers= factory("App\Answer",5)->create(["question_id"=>$question->id]);
         $response = $this->get("/questions/{$question->id}/answers");
@@ -26,7 +31,11 @@ class AnswerTest extends TestCase
     }
 
     public function testCreateNewAnswer(){
-        $this->withoutExceptionHandling();
+        // $this->withoutExceptionHandling();
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $question = factory("App\Question")->create();
         $answer= factory("App\Answer")->raw(["question_id"=>""]);
         $response= $this->post("/questions/{$question->id}/answers",$answer);
@@ -37,6 +46,10 @@ class AnswerTest extends TestCase
     }
 
     public function testUpdateAnswer(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $answer= factory("App\Answer")->create();
         $answer->answer="update answer";
         $response= $this->put("/answers/{$answer->id}",$answer->toArray());
@@ -46,6 +59,10 @@ class AnswerTest extends TestCase
     }
 
     public function testGetOneAnswer(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $answer= factory("App\Answer")->create();
         $response= $this->get("/answers/{$answer->id}");
         $response->assertStatus(200);
@@ -53,6 +70,10 @@ class AnswerTest extends TestCase
     }
 
     public function testDeleteAnswer(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
         $answer= factory("App\Answer")->create();
 
         $response= $this->delete("/answers/{$answer->id}");
