@@ -19,24 +19,16 @@ class QuestionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Poll $poll,Request $request)
     {
-        //
+        $attributes=$request->all();
+        $attributes["poll_id"]=$poll->id;
+        return response()->json(Question::create($attributes),201);
     }
 
     /**

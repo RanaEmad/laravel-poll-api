@@ -23,4 +23,21 @@ class QuestionTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson($questions->toArray());
     }
+
+    public function testCreateNewQuestion(){
+        // $this->withoutExceptionHandling();
+        $poll= \factory("App\Poll")->create();
+        $question= \factory("App\Question")->raw(["poll_id"=>""]);
+        $response=$this->post("/polls/{$poll->id}/questions",$question);
+        $response->assertStatus(201);
+        $question["poll_id"]=$poll->id;
+        $response->assertJson($question);
+    }
+
+    public function testCreateNewQuestionToNonExistingPoll(){
+        // $this->withoutExceptionHandling();
+        $question= \factory("App\Question")->raw(["poll_id"=>""]);
+        $response=$this->post("/polls/1400/questions",$question);
+        $response->assertStatus(404);
+    }
 }
