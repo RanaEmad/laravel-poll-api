@@ -39,7 +39,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return response()->json($question->toArray(),200);
     }
 
     /**

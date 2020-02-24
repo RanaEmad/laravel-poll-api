@@ -49,4 +49,12 @@ class QuestionTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson($question->toArray());
     }
+
+    public function testGetOneQuestion(){
+        // $this->withoutExceptionHandling();
+        $question = \factory("App\Question")->create();
+        $response = $this->get("/questions/{$question->id}");
+        $response->assertStatus(200);
+        $response->assertJson($question->toArray());
+    }
 }
