@@ -15,7 +15,7 @@ class QuestionController extends Controller
      */
     public function index(Poll $poll)
     {
-        return response()->json($poll->questions,200);
+        return response()->json($poll->questions()->paginate(),200);
     }
 
     /**

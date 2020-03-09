@@ -15,7 +15,7 @@ class AnswerController extends Controller
      */
     public function index(Question $question)
     {
-        return response()->json($question->answers,200);
+        return response()->json($question->answers()->paginate(),200);
     }
 
     /**

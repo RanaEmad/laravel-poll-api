@@ -26,7 +26,7 @@ class QuestionTest extends TestCase
         $response = $this->get("/polls/{$poll->id}/questions");
 
         $response->assertStatus(200);
-        $response->assertJson($questions->toArray());
+        $response->assertJson(["data"=>$questions->toArray()]);
     }
 
     public function testCreateNewQuestion(){

@@ -27,7 +27,7 @@ class AnswerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertJson($answers->toArray());
+        $response->assertJson(["data"=>$answers->toArray()]);
     }
 
     public function testCreateNewAnswer(){
