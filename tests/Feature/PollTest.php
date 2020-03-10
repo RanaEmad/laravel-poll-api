@@ -52,7 +52,7 @@ class PollTest extends TestCase
         // $this->withoutExceptionHandling();
         Passport::actingAs(factory("App\User")->create(),["*"]);
 
-        $poll= factory("App\Poll")->raw(["title"=>$this->faker->realText(55)]);
+        $poll= factory("App\Poll")->raw(["title"=>$this->faker->sentence(51)]);
         $response= $this->post("/polls",$poll);
         $response->assertStatus(200);
         $response->assertJsonValidationErrors(["title"]);

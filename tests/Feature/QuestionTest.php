@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class QuestionTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     /**
      * A basic feature test example.
      *
@@ -43,6 +43,55 @@ class QuestionTest extends TestCase
         $response->assertJson($question);
     }
 
+    public function testTitleRequired(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
+        $poll= \factory("App\Poll")->create();
+        $question= \factory("App\Question")->raw(["poll_id"=>"","title"=>""]);
+        $response=$this->post("/polls/{$poll->id}/questions",$question);
+        $response->assertStatus(200);
+        $question["poll_id"]=$poll->id;
+        $response->assertJsonValidationErrors(["title"]);
+    }
+
+    public function testTitleMaxLength(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
+        $poll= \factory("App\Poll")->create();
+        $question= \factory("App\Question")->raw(["poll_id"=>"","title"=>$this->faker->sentence(51)]);
+        $response=$this->post("/polls/{$poll->id}/questions",$question);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["title"]);
+    }
+
+    public function testQuestionMaxLength(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
+        $poll= \factory("App\Poll")->create();
+        $question= \factory("App\Question")->raw(["poll_id"=>"","question"=>$this->faker->sentence(251)]);
+        $response=$this->post("/polls/{$poll->id}/questions",$question);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["question"]);
+    }
+
+    public function testQuestionRequired(){
+        Passport::actingAs(
+            factory("App\User")->create(),
+            ['*']
+        );
+        $poll= \factory("App\Poll")->create();
+        $question= \factory("App\Question")->raw(["poll_id"=>"","question"=>""]);
+        $response=$this->post("/polls/{$poll->id}/questions",$question);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["question"]);
+    }
+
     public function testCreateNewQuestionToNonExistingPoll(){
         Passport::actingAs(
             factory("App\User")->create(),
@@ -59,7 +108,7 @@ class QuestionTest extends TestCase
             factory("App\User")->create(),
             ['*']
         );
-         $this->withoutExceptionHandling();
+        //  $this->withoutExceptionHandling();
         $question= \factory("App\Question")->create();
         $question->title= "updated title";
         $response=$this->put("/questions/{$question->id}",$question->toArray());

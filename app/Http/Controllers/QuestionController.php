@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Question;
 use App\Poll;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -26,7 +27,14 @@ class QuestionController extends Controller
      */
     public function store(Poll $poll,Request $request)
     {
-        $attributes=$request->all();
+        $attributes=[
+            "title"=>$request->title,
+            "question"=>$request->question
+        ];
+        $validator= $this->validateData($attributes);
+        if($validator->fails()){
+            return response()->json(["errors"=>$validator->errors()],200);
+        }
         $attributes["poll_id"]=$poll->id;
         return response()->json(Question::create($attributes),201);
     }
@@ -51,8 +59,16 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        $question->title=$request->title;
-        $question->question=$request->question;
+        $attributes=[
+            "title"=>$request->title,
+            "question"=>$request->question
+        ];
+        $validator= $this->validateData($attributes);
+        if($validator->fails()){
+            return response()->json(["errors"=>$validator->errors()],200);
+        }
+        $question->title=$attributes["title"];
+        $question->question=$attributes["question"];
         $question->save();
         return response()->json($question->toArray(),200);
     }
@@ -67,5 +83,13 @@ class QuestionController extends Controller
     {
         $question->delete();
         return response()->json(["message"=>"Data Deleted Successfully!"]);
+    }
+
+    protected function validateData($data){
+        $validator= Validator::make($data,[
+            "title"=>"required|max:50",
+            "question"=>"required|max:250"
+        ]);
+        return $validator;
     }
 }
