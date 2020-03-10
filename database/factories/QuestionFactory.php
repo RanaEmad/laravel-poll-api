@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Question::class, function (Faker $faker) {
     return [
-        "title"=>$faker->realText(50),
-        "question"=>$faker->paragraph,
+        "title"=>$faker->text(20),
+        "question"=>$faker->text(50),
         "poll_id"=>function(){
             $poll = factory("App\Poll")->create();
             return $poll;

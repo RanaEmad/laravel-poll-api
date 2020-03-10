@@ -31,7 +31,7 @@ class AnswerTest extends TestCase
     }
 
     public function testCreateNewAnswer(){
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
         Passport::actingAs(
             factory("App\User")->create(),
             ['*']
@@ -43,6 +43,15 @@ class AnswerTest extends TestCase
         $answer["question_id"]=$question->id;
         $this->assertDatabaseHas("answers",$answer);
         $response->assertJson($answer);
+    }
+
+    public function testAnswerRequired(){
+        Passport::actingAs(factory("App\User")->create(),["*"]);
+        $question= factory("App\Question")->create();
+        $answer= factory("App\Answer")->raw(["question_id"=>"","answer"=>""]);
+        $response= $this->post("/questions/{$question->id}/answers",$answer);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["answer"]);
     }
 
     public function testUpdateAnswer(){
