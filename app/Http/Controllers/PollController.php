@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Poll;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PollController extends Controller
 {
@@ -25,6 +26,11 @@ class PollController extends Controller
      */
     public function store(Request $request)
     {
+        $data['title']=$request->title;
+        $validator=$this->validateData($data);
+        if($validator->fails()){
+            return response()->json(["errors"=>$validator->errors()],200);
+        }
         return response()->json(Poll::create($request->all()),201);
     }
 
@@ -40,17 +46,6 @@ class PollController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Poll  $poll
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Poll $poll)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -59,6 +54,11 @@ class PollController extends Controller
      */
     public function update(Request $request, Poll $poll)
     {
+        $data['title']=$request->title;
+        $validator=$this->validateData($data);
+        if($validator->fails()){
+            return response()->json(["errors"=>$validator->errors()],200);
+        }
         $poll->title= $request->title;
         $poll->save();
         return response()->json($poll,200);
@@ -74,5 +74,10 @@ class PollController extends Controller
     {
         $poll->delete();
         return response()->json(["message"=>"Data Deleted Successfully!"],200);
+    }
+
+    protected function validateData($data){
+        $validator= Validator::make($data,["title"=>"required|max:50"]);
+         return $validator;
     }
 }

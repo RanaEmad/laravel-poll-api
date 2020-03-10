@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class PollTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
     /**
      * A basic feature test example.
      *
@@ -36,6 +36,26 @@ class PollTest extends TestCase
         $response = $this->post('/polls',$poll);
         $response->assertStatus(201);
         $response->assertJson($poll);
+    }
+
+    public function testTitleRequired(){
+        // $this->withoutExceptionHandling();
+        Passport::actingAs(factory("App\User")->create(),["*"]);
+
+        $poll= factory("App\Poll")->raw(["title"=>""]);
+        $response= $this->post("/polls",$poll);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["title"]);
+    }
+
+    public function testTitleMaxLength(){
+        // $this->withoutExceptionHandling();
+        Passport::actingAs(factory("App\User")->create(),["*"]);
+
+        $poll= factory("App\Poll")->raw(["title"=>$this->faker->realText(55)]);
+        $response= $this->post("/polls",$poll);
+        $response->assertStatus(200);
+        $response->assertJsonValidationErrors(["title"]);
     }
 
     public function testGetOnePoll(){
